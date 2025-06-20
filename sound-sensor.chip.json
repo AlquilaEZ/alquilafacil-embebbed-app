@@ -1,0 +1,22 @@
+{
+  "name": "sound-sensor",
+  "author": "Mariano Ames Oviedo",
+  "pins": [
+    "VCC",
+    "GND",
+    "A0",
+    "DOUT",
+    "",
+    "",
+    ""
+  ],
+  "controls": [{
+    "id": "soundLevel",
+    "label": "Sound level db",
+    "type": "range",
+    "min": 0,
+    "max": 200,
+    "step": 1
+  }
+      ]
+}
