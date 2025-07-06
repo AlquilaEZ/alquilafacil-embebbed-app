@@ -30,6 +30,7 @@
 #include "EntryMovementSensor.h"
 #include "RestrictedAreaMovementSensor.h"
 #include "SmokeSensor.h"
+#include "SoundSensor.h"
 
 #include <WiFi.h>
 #include <HTTPClient.h>
@@ -40,6 +41,7 @@ private:
     RestrictedAreaMovementSensor restrictedAreaMovementSensor;
     EntryMovementSensor innerMovementSensor;
     EntryMovementSensor outerMovementSensor;
+    SoundSensor soundSensor;
 
     Event pendingEvent;
     bool hasPendingEvent = false;
@@ -51,26 +53,27 @@ public:
 
     static const int INNER_MOVEMENT_SENSOR_PIN = 25;
     static const int OUTER_MOVEMENT_SENSOR_PIN = 26;
+    
+    static const int SOUND_SENSOR_PIN = 21;
 
 
     static const unsigned long MOVEMENT_TIMEOUT_MS = 5000; // Tiempo máximo entre sensores
 
-    MonitoringLocalDevice(int restrictedAreaPin = RESTRICTED_AREA_PIN, int smokeAnalogPin = SMOKE_ANALOG_PIN, int smokeDigitalPin = SMOKE_DIGITAL_PIN, int innerMovementPin = INNER_MOVEMENT_SENSOR_PIN, int outerMovementPin = OUTER_MOVEMENT_SENSOR_PIN); ///< Constructor with configurable pins and initial LED state.
+    MonitoringLocalDevice(int restrictedAreaPin = RESTRICTED_AREA_PIN, int smokeAnalogPin = SMOKE_ANALOG_PIN, int smokeDigitalPin = SMOKE_DIGITAL_PIN, int innerMovementPin = INNER_MOVEMENT_SENSOR_PIN, int outerMovementPin = OUTER_MOVEMENT_SENSOR_PIN,int soundPin = SOUND_SENSOR_PIN); ///< Constructor with configurable pins and initial LED state.
     
     //Variables que guardan la ultima activación de los sensores de movimiento de la entrada
     unsigned long lastInnerSensorTriggerTime = 0;
     unsigned long lastOuterSensorTriggerTime = 0;
 
-
     void on(Event event) override; ///< Handles button press events.
     void handle(Command command) override; ///< Handles LED command responses (e.g., state reporting).
     void check();
-
 
     void triggerRestrictedAreaEvent(Event event);
     void triggerSmokeSensorEvent(Event event);
     void triggerInnerMovementSensorEvent(Event event);
     void triggerOuterMovementSensorEvent(Event event);
+    void triggerSoundSensorEvent(Event event);
 
     //void triggerButtonEvent(Event event); ///< Triggers a button event externally (e.g., from ISR).
     void sendEventToServer(const char* sensorType, String message, const char* endpointUrl);

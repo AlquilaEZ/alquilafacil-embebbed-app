@@ -5,18 +5,13 @@
     "VCC",
     "GND",
     "A0",
-    "DOUT",
+    "D0",
     "",
     "",
     ""
   ],
-  "controls": [{
-    "id": "soundLevel",
-    "label": "Sound level db",
-    "type": "range",
-    "min": 0,
-    "max": 200,
-    "step": 1
-  }
+  "controls": [
+    {"id": "sound", "label": "Sound Level", "type": "range", "min": 0, "max": 100, "step": 1},
+    {"id": "threshold", "label": "Sound Treshold", "type": "range", "min": 0, "max": 100, "step": 1}
       ]
 }

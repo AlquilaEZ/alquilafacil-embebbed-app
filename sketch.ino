@@ -15,6 +15,7 @@ bool flagSmoke = false;
 bool flagRestrictedArea = false;
 bool flagInnerMovement = false;
 bool flagOuterMovement = false;
+bool flagSound = false;
 
 
 
@@ -50,6 +51,15 @@ void IRAM_ATTR triggerOuterMovementDetected() {
   unsigned long now = millis();
   if (now - last > DEBOUNCE_DELAY_MS) {
     flagOuterMovement = true;
+    last = now;
+  }
+}
+
+void IRAM_ATTR triggerSoundDetected(){
+  static unsigned long last = 0;
+  unsigned long now = millis();
+  if (now - last > DEBOUNCE_DELAY_MS) {
+    flagSound = true;
     last = now;
   }
 }
@@ -92,6 +102,12 @@ void setup() {
     triggerOuterMovementDetected,
     RISING
   );
+
+  attachInterrupt(
+    digitalPinToInterrupt(MonitoringLocalDevice::SOUND_SENSOR_PIN),
+    triggerSoundDetected,
+    RISING
+  );
 }
 
 void loop() {
@@ -99,9 +115,6 @@ void loop() {
     flagSmoke = false;
     device.on(SmokeSensor::SMOKE_DETECTED_EVENT);
   }
-
-  
-
   if (flagRestrictedArea){
     flagRestrictedArea = false;
     device.on(RestrictedAreaMovementSensor::RESTRICTED_AREA_ACCESS_DETECTED_EVENT);
@@ -113,6 +126,10 @@ void loop() {
   if (flagOuterMovement){
     flagOuterMovement = false;
     device.on(EntryMovementSensor::OUTER_MOVEMENT_DETECTED_EVENT);
+  }
+  if (flagSound){
+    flagSound = false;
+    device.on(SoundSensor::SOUND_DETECTED_EVENT);
   }
   delay(10); // this speeds up the simulation
 }
