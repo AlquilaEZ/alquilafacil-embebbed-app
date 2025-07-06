@@ -44,9 +44,9 @@ void MonitoringLocalDevice::on(Event event) {
   if (event == EntryMovementSensor::INNER_MOVEMENT_DETECTED_EVENT){
     unsigned long now = millis();
     if(now - lastOuterSensorTriggerTime < MOVEMENT_TIMEOUT_MS){
-      //Se activo el sensor 1 hace menos de 500 ms, es una salida.
-      Serial.println("Se detecto una salida");
-      String mensaje = "OUT";
+      //Se activo el sensor 1 hace menos de 500 ms, es una entrada.
+      Serial.println("Se detecto una entrada");
+      String mensaje = "IN";
       sendEventToServer("entry", mensaje, ENDPOINT_ENTRY);
     } else {
         lastInnerSensorTriggerTime = now;
@@ -56,9 +56,9 @@ void MonitoringLocalDevice::on(Event event) {
   if (event == EntryMovementSensor::OUTER_MOVEMENT_DETECTED_EVENT){
     unsigned long now = millis();
     if(now - lastInnerSensorTriggerTime < MOVEMENT_TIMEOUT_MS){
-      //Se activo el sensor 2 hace menos de 500 ms, es una entrada.
-      Serial.println("Se detecto una entrada");
-      String mensaje = "IN";
+      //Se activo el sensor 2 hace menos de 500 ms, es una salida.
+      Serial.println("Se detecto una salida");
+      String mensaje = "OUT";
       sendEventToServer("entry", mensaje,ENDPOINT_ENTRY);
     } else {
         lastOuterSensorTriggerTime = now;
